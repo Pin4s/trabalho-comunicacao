@@ -1,5 +1,7 @@
 import { Handle, Position, type NodeProps } from '@xyflow/react';
 import { Check, Star } from 'lucide-react';
+import { m } from 'motion/react';
+import { BOOT } from '../animation';
 import { stages, type StageStatus } from '../data/career';
 import { icons } from '../components/icons';
 import { useSelection } from '../selection';
@@ -40,39 +42,47 @@ export function StageCard({ data }: NodeProps<StageNodeType>) {
 
   return (
     <div className="relative" style={{ width: CARD_WIDTH, height: CARD_HEIGHT }}>
-      {stage.status === 'current' && (
-        <span className="absolute bottom-full left-1/2 mb-2 -translate-x-1/2 rounded-full bg-accent px-2.5 py-0.5 font-mono text-[10px] font-semibold text-black">
-          Atual
-        </span>
-      )}
-
-      <button
-        type="button"
-        aria-pressed={selected}
-        aria-label={`${stage.title}: ${stage.subtitle}`}
-        className={[
-          'flex h-full w-full cursor-pointer flex-col items-center rounded-xl bg-surface px-3 pb-4 pt-4 text-center outline-none',
-          'focus-visible:ring-1 focus-visible:ring-accent',
-          borderClass(stage.status, selected),
-          selected ? 'shadow-[0_0_26px_-4px_rgba(34,229,139,0.45)]' : '',
-          stage.status === 'not-chosen' ? 'opacity-40' : '',
-        ].join(' ')}
+      {/* Boot: fade + scale. Handles ficam fora do elemento escalado pra medição do React Flow não distorcer. */}
+      <m.div
+        className="absolute inset-0"
+        initial={{ opacity: 0, scale: 0.96 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: data.bootIndex * BOOT.stagger, duration: BOOT.cardDuration, ease: 'easeOut' }}
       >
-        <span
-          className={`grid h-9 w-9 place-items-center rounded-lg border border-line bg-black/40 ${
-            dim && !selected ? 'text-neutral-500' : 'text-accent'
-          }`}
+        {stage.status === 'current' && (
+          <span className="absolute bottom-full left-1/2 mb-2 -translate-x-1/2 rounded-full bg-accent px-2.5 py-0.5 font-mono text-[10px] font-semibold text-black">
+            Atual
+          </span>
+        )}
+
+        <button
+          type="button"
+          aria-pressed={selected}
+          aria-label={`${stage.title}: ${stage.subtitle}`}
+          className={[
+            'flex h-full w-full cursor-pointer flex-col items-center rounded-xl bg-surface px-3 pb-4 pt-4 text-center outline-none',
+            'focus-visible:ring-1 focus-visible:ring-accent',
+            borderClass(stage.status, selected),
+            selected ? 'shadow-[0_0_26px_-4px_rgba(34,229,139,0.45)]' : '',
+            stage.status === 'not-chosen' ? 'opacity-40' : '',
+          ].join(' ')}
         >
-          <Icon size={18} strokeWidth={1.5} />
-        </span>
-        <span className={`mt-3 font-mono text-[13px] font-semibold leading-tight ${dim ? 'text-neutral-300' : 'text-white'}`}>
-          {stage.title}
-        </span>
-        <span className="mt-1.5 line-clamp-2 text-[11px] leading-snug text-neutral-400">{stage.subtitle}</span>
-        <span className="mt-auto flex h-5 items-center">
-          <StatusMarker status={stage.status} />
-        </span>
-      </button>
+          <span
+            className={`grid h-9 w-9 place-items-center rounded-lg border border-line bg-black/40 ${
+              dim && !selected ? 'text-neutral-500' : 'text-accent'
+            }`}
+          >
+            <Icon size={18} strokeWidth={1.5} />
+          </span>
+          <span className={`mt-3 font-mono text-[13px] font-semibold leading-tight ${dim ? 'text-neutral-300' : 'text-white'}`}>
+            {stage.title}
+          </span>
+          <span className="mt-1.5 line-clamp-2 text-[11px] leading-snug text-neutral-400">{stage.subtitle}</span>
+          <span className="mt-auto flex h-5 items-center">
+            <StatusMarker status={stage.status} />
+          </span>
+        </button>
+      </m.div>
 
       <Handle type="target" position={Position.Left} isConnectable={false} style={hiddenHandle} />
       <Handle type="source" position={Position.Right} isConnectable={false} style={hiddenHandle} />

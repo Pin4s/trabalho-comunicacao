@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, type MouseEvent } from 'react';
 import {
+  Background,
+  BackgroundVariant,
   ReactFlow,
   ReactFlowProvider,
   useNodesState,
@@ -66,7 +68,10 @@ function Flow() {
         selectionKeyCode={null}
         multiSelectionKeyCode={null}
         proOptions={{ hideAttribution: true }}
-      />
+      >
+        {/* size 2: com o padrão (1) e o zoom do fitView (~0,5) o ponto some (<0,3px de raio) */}
+        <Background variant={BackgroundVariant.Dots} gap={24} size={2} color="#1a1a1a" />
+      </ReactFlow>
     </div>
   );
 }

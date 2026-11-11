@@ -12,6 +12,7 @@
   "dependencies": {
     "@xyflow/react": "^12.6.4",
     "lucide-react": "^0.515.0",
+    "motion": "^12.43.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },

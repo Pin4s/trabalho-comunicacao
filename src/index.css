@@ -40,3 +40,41 @@ body {
 .react-flow {
   --xy-background-color: transparent;
 }
+
+/* Boot: conexões se desenham (stroke-dashoffset na máscara, path com pathLength=1) */
+.edge-draw {
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 1;
+  animation-name: edge-draw;
+  animation-timing-function: ease-out;
+  animation-fill-mode: both;
+}
+
+@keyframes edge-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Boot: bolinhas das pontas aparecem quando a linha chega */
+.edge-dot {
+  animation: edge-dot 100ms linear both;
+}
+
+@keyframes edge-dot {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor-blink,
+  .edge-dot {
+    animation: none;
+  }
+
+  .edge-draw {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}
